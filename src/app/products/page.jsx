@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./products.module.css";
 
@@ -9,7 +9,6 @@ const starArray = (rating) => Array.from({ length: 5 }, (_, index) => index < Ma
 const formatPrice = (price) => `$${Number(price).toFixed(2)}`;
 
 export default function ProductsPage() {
-  const router = useRouter();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -45,20 +44,7 @@ export default function ProductsPage() {
           const isRatingHigh = product.rating?.rate >= 4.5;
 
           return (
-            <div
-              key={product.id}
-              className={styles.cardLink}
-              role="link"
-              tabIndex={0}
-              onClick={() => router.push(`/products/details/${product.id}`)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  router.push(`/products/details/${product.id}`);
-                }
-              }}
-              aria-label={`View details for ${product.title}`}
-            >
+            <Link key={product.id} href={`/products/details/${product.id}`} className={styles.cardLink}>
               <article className={styles.card}>
                 <div className={styles.imageWrap}>
                   <img src={product.image} alt={product.title} className={styles.image} />
@@ -86,7 +72,7 @@ export default function ProductsPage() {
                   {isRatingHigh && <span className={styles.oldPrice}>${(product.price + 9.99).toFixed(2)}</span>}
                 </div>
               </article>
-            </div>
+            </Link>
           );
         })}
       </section>
